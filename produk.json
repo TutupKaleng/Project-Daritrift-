@@ -1,0 +1,98 @@
+[
+  {
+    "id": "TR-01",
+    "name": "Kemeja Flanel Kotak Vintage",
+    "cat": "Atasan",
+    "img": "https://images.unsplash.com/photo-1589416847957-c5ef9993e3d4?q=80&w=400&auto=format&fit=crop",
+    "price": 65000,
+    "old": 120000,
+    "size": "M",
+    "cond": "Like New",
+    "code": "TR-01",
+    "desc": "Flanel tebal, warna masih cerah, belum ada bekas pudar. Cocok dipakai outer atau langsung dikancing penuh untuk gaya kasual."
+  },
+  {
+    "id": "TR-02",
+    "name": "Dress Rajut Mini Earth Tone",
+    "cat": "Dress",
+    "img": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=400&auto=format&fit=crop",
+    "price": 85000,
+    "old": 150000,
+    "size": "S/M",
+    "cond": "Sangat Baik",
+    "code": "TR-02",
+    "desc": "Bahan rajut adem, jahitan rapi, tidak melar. Pas untuk acara santai atau dipadu cardigan."
+  },
+  {
+    "id": "TR-03",
+    "name": "Jaket Denim Oversize Blue Wash",
+    "cat": "Outer",
+    "img": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?q=80&w=400&auto=format&fit=crop",
+    "price": 95000,
+    "old": 180000,
+    "size": "L",
+    "cond": "Good Condition",
+    "code": "TR-03",
+    "desc": "Ada sedikit fading khas denim vintage di bagian lengan — bukan cacat, justru karakter. Kancing semua berfungsi normal."
+  },
+  {
+    "id": "TR-04",
+    "name": "Kaos Striped Retro",
+    "cat": "Atasan",
+    "img": "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=400&auto=format&fit=crop",
+    "price": 45000,
+    "old": 90000,
+    "size": "L",
+    "cond": "Sangat Baik",
+    "code": "TR-04",
+    "desc": "Bahan katun combed sangat adem. Warna garis-garisnya masih pekat, karet leher masih kencang tidak melar."
+  },
+  {
+    "id": "TR-05",
+    "name": "Floral Summer Dress",
+    "cat": "Dress",
+    "img": "https://images.unsplash.com/photo-1612336307429-8a898d10e223?q=80&w=400&auto=format&fit=crop",
+    "price": 90000,
+    "old": 175000,
+    "size": "M",
+    "cond": "Like New",
+    "code": "TR-05",
+    "desc": "Bahan sifon premium pakai furing dalam, jadi tidak menerawang. Motif bunga kecil aesthetics, cantik banget buat piknik."
+  },
+  {
+    "id": "TR-06",
+    "name": "Cardigan Knit Oversize Cream",
+    "cat": "Outer",
+    "img": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=400&auto=format&fit=crop",
+    "price": 75000,
+    "old": 140000,
+    "size": "All Size",
+    "cond": "Sangat Baik",
+    "code": "TR-06",
+    "desc": "Cardigan rajut model drop-shoulder (bahu turun). Rajutan tebal tebal tapi tidak bikin gerah, warna cream estetik mamba."
+  },
+  {
+    "id": "TR-07",
+    "name": "Blouse Silk Kerja Premium",
+    "cat": "Atasan",
+    "img": "https://images.unsplash.com/photo-1548624149-f7b2e65cbdde?q=80&w=400&auto=format&fit=crop",
+    "price": 55000,
+    "old": 110000,
+    "size": "S",
+    "cond": "Like New",
+    "code": "TR-07",
+    "desc": "Bahan silk premium lembut dengan efek kilap mewah. Kondisi mulus tanpa benang ketarik, pas untuk kerja atau kuliah."
+  },
+  {
+    "id": "TR-08",
+    "name": "Corduroy Pants Brown Mamba",
+    "cat": "Bawahan",
+    "img": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=400&auto=format&fit=crop",
+    "price": 88000,
+    "old": 160000,
+    "size": "29-30",
+    "cond": "Good Condition",
+    "code": "TR-08",
+    "desc": "Bahan korduroi garis tebal. Warna cokelat tua pekat, saku aman, resleting lancar jaya. Model potongan lurus (straight fit)."
+  }
+]

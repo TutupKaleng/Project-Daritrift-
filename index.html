@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DariThrift — Official Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    .nav-link.active-menu { 
+      color: #E0568A; 
+      font-weight: 700; 
+      border-bottom: 2px solid #E0568A; 
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes marquee {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+    .animate-marquee {
+      display: inline-block;
+      animation: marquee 22s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#FFF8F4]/30 min-h-screen text-slate-900 font-sans antialiased selection:bg-[#F2A6BE] selection:text-[#34552F]">
+
+  <!-- ========================================== -->
+  <!-- 1. DASHBOARD AWAL / LOGIN SCREEN -->
+  <!-- ========================================== -->
+  <div id="login-screen" class="fixed inset-0 z-50 bg-[#2B2723] flex items-center justify-center p-4 overflow-hidden">
+    <div class="absolute inset-0 z-0 w-full h-full">
+      <video class="w-full h-full object-cover brightness-35 contrast-110" autoplay loop muted playsinline webkit-playsinline>
+        <source src="https://player.vimeo.com/external/459389137.hd.mp4?s=964e3fee5d59e35f992abda94430e521af74472a&profile_id=172&oauth2_token_id=57447761" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-md bg-white/90 backdrop-blur-2xl rounded-3xl p-8 border border-white/20 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] text-center fade-in">
+      <div class="w-24 h-24 bg-white rounded-full mx-auto shadow-xl mb-4 border-2 border-[#E0568A] transform transition hover:scale-105 duration-300 overflow-hidden flex items-center justify-center">
+        <img src="LOGO FINAL.jpeg" alt="DariThrift Logo" class="w-full h-full object-cover">
+      </div>
+      
+      <h1 class="text-2xl font-black text-gray-950 tracking-tighter uppercase mb-1">
+        DARI THRIFT <span class="text-[#E0568A]">PORTAL</span>
+      </h1>
+      <p class="text-xs text-gray-500 max-w-xs mx-auto mb-6 font-medium leading-relaxed">
+        Premium curated vintage streetwear. Eksklusif, berkelas, dan ramah lingkungan.
+      </p>
+
+      <div class="grid grid-cols-2 bg-gray-100 p-1 rounded-2xl mb-5 border border-gray-200/40">
+        <button onclick="switchRole('customer')" id="btn-tab-customer" class="py-2.5 text-xs font-black uppercase tracking-wider rounded-xl bg-white text-black transition-all cursor-pointer shadow-xs">
+          🛍️ Customer
+        </button>
+        <button onclick="switchRole('admin')" id="btn-tab-admin" class="py-2.5 text-xs font-black uppercase tracking-wider rounded-xl text-gray-500 hover:text-black transition-all cursor-pointer">
+          🔑 Admin Toko
+        </button>
+      </div>
+
+      <div id="form-customer" class="space-y-4 block">
+        <button onclick="loginAsCustomer()" class="w-full bg-[#2B2723] hover:bg-black text-white py-3.5 rounded-xl font-black uppercase text-xs tracking-widest shadow-md active:scale-[0.98] transition-all cursor-pointer">
+          MASUK KATALOG LIVE
+        </button>
+      </div>
+
+      <div id="form-admin" class="space-y-4 hidden text-left">
+        <div>
+          <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Password Akses</label>
+          <input type="password" id="admin-password" placeholder="Masukkan sandi panel..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-1 focus:ring-black text-gray-900">
+        </div>
+        <button onclick="loginAsAdmin()" class="w-full bg-[#34552F] hover:bg-[#233a20] text-white py-3.5 rounded-xl font-black uppercase text-xs tracking-widest shadow-md active:scale-[0.98] transition-all cursor-pointer text-center">
+          MASUK DASHBOARD
+        </button>
+      </div>
+
+      <div class="mt-6 pt-5 border-t border-gray-100 flex items-center justify-center gap-4 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+        <span>EST. 2026</span>
+        <span>•</span>
+        <span>MALANG HUB</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. ADMIN DASHBOARD PANEL (PRIVATE) -->
+  <!-- ========================================== -->
+  <div id="admin-dashboard-screen" class="min-h-screen bg-neutral-950 text-white hidden">
+    <header class="border-b border-neutral-800 bg-neutral-950/80 sticky top-0 backdrop-blur-md z-30">
+      <div class="container mx-auto px-4 lg:px-12 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <span class="bg-amber-400 text-black text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Lapak Owner</span>
+          <h2 class="text-sm font-black tracking-tight uppercase">DARITHRIFT HUB CENTRAL</h2>
+        </div>
+        <button onclick="logoutToGate()" class="bg-neutral-900 hover:bg-red-900/40 text-neutral-300 hover:text-red-200 text-xs font-bold px-4 py-2 rounded-xl border border-neutral-800 transition cursor-pointer">Keluar Panel</button>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 lg:px-12 py-8 space-y-8">
+      <div class="bg-gradient-to-r from-neutral-900 to-neutral-950 p-6 rounded-2xl border border-neutral-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h3 class="text-base font-bold">Lacak & Tambah Inventaris Toko Live 🚀</h3>
+          <p class="text-xs text-neutral-400 mt-0.5">Sekali klik tambah barang baru, data otomatis tersimpan rapi dan langsung update ke katalog pelanggan depan.</p>
+        </div>
+        <button onclick="openAddProductModal()" class="bg-white text-black font-black text-xs px-5 py-3 rounded-xl hover:bg-neutral-200 active:scale-95 transition-all uppercase tracking-wider cursor-pointer">➕ Tambah Produk Baru</button>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <span class="text-neutral-500 text-[10px] font-bold uppercase tracking-wider block">Total Live Etalase</span>
+          <span id="stat-total" class="text-2xl font-black mt-1 text-amber-400 block">0</span>
+        </div>
+        <div class="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <span class="text-neutral-500 text-[10px] font-bold uppercase tracking-wider block">Kelompok Menu</span>
+          <span class="text-2xl font-black mt-1 text-sky-400 block">7</span>
+        </div>
+        <div class="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <span class="text-neutral-500 text-[10px] font-bold uppercase tracking-wider block">Kurasi Kondisi Jual</span>
+          <span class="text-2xl font-black mt-1 text-emerald-400 block">Sangat Baik</span>
+        </div>
+        <div class="bg-neutral-900 p-5 rounded-2xl border border-neutral-800">
+          <span class="text-neutral-500 text-[10px] font-bold uppercase tracking-wider block">Status Database</span>
+          <span class="text-sm font-black mt-1.5 text-green-400 flex items-center gap-1.5 uppercase">AKTIF REAL-TIME <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span></span>
+        </div>
+      </div>
+
+      <div class="bg-neutral-900 rounded-2xl border border-neutral-800 overflow-hidden">
+        <div class="p-5 border-b border-neutral-800">
+          <h4 class="text-[11px] font-black uppercase tracking-widest text-neutral-400">Rangkuman Distribusi Stok Per Kategori</h4>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-neutral-300">
+            <thead class="bg-neutral-950 text-neutral-400 uppercase font-bold text-[10px] tracking-wider">
+              <tr>
+                <th class="p-4">Nama Kategori</th>
+                <th class="p-4">Jumlah Stok</th>
+                <th class="p-4">Rentang Jual Minimal</th>
+                <th class="p-4">Aksi Kontrol</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body" class="divide-y divide-neutral-800"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. MAIN CATALOG SCREEN (CUSTOMER/ADMIN VIEW) -->
+  <!-- ========================================== -->
+  <div id="main-catalog-screen" class="hidden">
+    <div class="bg-[#2B2723] text-white py-2.5 overflow-hidden border-b border-neutral-800 whitespace-nowrap relative select-none">
+      <div class="inline-block animate-marquee font-black text-[10px] tracking-widest uppercase">
+        💥 DARITHRIFT DROP SELECTIONS LIVE NOW! — DAPATKAN POTONGAN HARGA CORET UP TO 50% UNTUK KAOS VINTAGE & SEPATU SNEAKERS CURATED — FREE STICKER PACK SETIAP PEMBELIAN MINIMAL RP 150.000 — GAS ORDER VIA WHATSAPP SEBELUM STEAL DEAL DI-BOOKING SEBELAH! 🔥
+      </div>
+      <div class="inline-block animate-marquee font-black text-[10px] tracking-widest uppercase pl-4">
+        💥 DARITHRIFT DROP SELECTIONS LIVE NOW! — DAPATKAN POTONGAN HARGA CORET UP TO 50% UNTUK KAOS VINTAGE & SEPATU SNEAKERS CURATED — FREE STICKER PACK SETIAP PEMBELIAN MINIMAL RP 150.000 — GAS ORDER VIA WHATSAPP SEBELUM STEAL DEAL DI-BOOKING SEBELAH! 🔥
+      </div>
+    </div>
+
+    <nav class="bg-white sticky top-0 z-40 border-b border-gray-100 shadow-xs">
+      <div class="container mx-auto px-4 lg:px-12 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+          <img src="LOGO FINAL.jpeg" alt="Logo" class="w-9 h-9 rounded-full object-cover border border-[#E0568A]">
+          <h1 class="text-lg font-black tracking-tighter text-gray-900 uppercase cursor-pointer" onclick="filterCategory('all')">DARITHRIFT<span class="text-[#E0568A]">.</span></h1>
+        </div>
+        
+        <div class="flex flex-wrap justify-center gap-1 text-xs font-bold uppercase tracking-tight">
+          <button onclick="filterCategory('all', this)" class="nav-link active-menu px-2.5 py-1.5 rounded-lg transition cursor-pointer">Semua</button>
+          <button onclick="filterCategory('aksesoris-pria', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Aksesoris Pria</button>
+          <button onclick="filterCategory('aksesoris-wanita', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Aksesoris Wanita</button>
+          <button onclick="filterCategory('kaos', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Kaos Vintage</button>
+          <button onclick="filterCategory('sepatu', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Sepatu</button>
+          <button onclick="filterCategory('baju-kemeja', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Baju & Kemeja</button>
+          <button onclick="filterCategory('sweater', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Sweater</button>
+          <button onclick="filterCategory('kerudung', this)" class="nav-link px-2.5 py-1.5 rounded-lg transition cursor-pointer">Kerudung</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div id="admin-indicator" class="hidden bg-amber-500 text-black font-black text-[9px] uppercase px-2 py-1.5 rounded-xl border border-amber-600">Mode Admin 🛠️</div>
+          <button id="btn-back-to-admin" onclick="returnToAdminPanel()" class="hidden bg-neutral-900 text-white font-bold text-xs px-3 py-1.5 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition cursor-pointer">← Panel</button>
+          <input oninput="searchProduct(this.value)" type="text" placeholder="Cari nama barang..." class="w-full md:w-44 bg-gray-100 px-4 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-black">
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto px-4 lg:px-12 py-8">
+      <section id="hero-banner" class="block mb-12 relative rounded-3xl overflow-hidden min-h-[400px] md:min-h-[500px] bg-neutral-950 shadow-2xl group">
+        <!-- Slide 1 -->
+        <div class="nike-slide absolute inset-0 transition-all duration-1000 ease-in-out flex items-center opacity-100 z-10 bg-cover bg-center" data-index="0" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1200&auto=format&fit=crop');">
+          <div class="relative z-20 p-8 md:p-20 max-w-2xl text-white">
+            <span class="text-[#E0568A] font-black text-xs md:text-sm uppercase tracking-[0.3em] block mb-3">🔥 SELECTION VOL. 01</span>
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-4 uppercase">DARITHRIFT<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#E0568A]">AUTHENTIC</span></h2>
+            <p class="text-sm text-gray-300 max-w-md font-normal">Kurasi pakaian vintage pilihan kualitas tertinggi. Disortir detail, sudah disterilisasi wangi premium.</p>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="nike-slide absolute inset-0 transition-all duration-1000 ease-in-out flex items-center opacity-0 z-0 bg-cover bg-center" data-index="1" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=1200&auto=format&fit=crop');">
+          <div class="relative z-20 p-8 md:p-20 max-w-2xl text-white">
+            <span class="text-amber-400 font-black text-xs md:text-sm uppercase tracking-[0.3em] block mb-3">💥 STREETWEAR MOVE</span>
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-4 uppercase">MOVE ON &<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-amber-400">THRIFT IT</span></h2>
+            <p class="text-sm text-gray-300 max-w-md font-normal">Bongkar gaya mamba atau retro vintage-mu sekarang. Koleksi super langka siap di-booking.</p>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="nike-slide absolute inset-0 transition-all duration-1000 ease-in-out flex items-center opacity-0 z-0 bg-cover bg-center" data-index="2" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=1200&auto=format&fit=crop');">
+          <div class="relative z-20 p-8 md:p-20 max-w-2xl text-white">
+            <span class="text-emerald-400 font-black text-xs md:text-sm uppercase tracking-[0.3em] block mb-3">🌱 ECO-FRIENDLY LOOKS</span>
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-4 uppercase">STYLE HAS<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-400">NO LIMIT</span></h2>
+            <p class="text-sm text-gray-300 max-w-md font-normal">Mengurangi limbah tekstil dunia dengan tetap tampil stylish 100% handpicked pilihan editor.</p>
+          </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="nike-slide absolute inset-0 transition-all duration-1000 ease-in-out flex items-center opacity-0 z-0 bg-cover bg-center" data-index="3" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=1200&auto=format&fit=crop');">
+          <div class="relative z-20 p-8 md:p-20 max-w-2xl text-white">
+            <span class="text-sky-400 font-black text-xs md:text-sm uppercase tracking-[0.3em] block mb-3">🎯 STEAL DEAL SPECIAL</span>
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-4 uppercase">EXCLUSIVE<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-sky-400">DROP ZONE</span></h2>
+            <p class="text-sm text-gray-300 max-w-md font-normal">Jangan biarkan keranjang belanjaanmu kosong, klik tombol WhatsApp di bawah.</p>
+          </div>
+        </div>
+
+        <div class="absolute bottom-8 right-8 left-8 md:left-auto md:w-80 z-30 bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex flex-col gap-2.5">
+          <div class="flex justify-between items-center text-[11px] text-gray-300 font-black uppercase tracking-[0.15em]">
+            <span class="text-white">DARITHRIFT SCENE</span>
+            <span id="nike-index-text">1 / 4</span>
+          </div>
+          <div class="w-full h-[3px] bg-white/15 rounded-full overflow-hidden">
+            <div id="nike-progress-bar" class="w-0 h-full bg-[#E0568A] rounded-full transition-all duration-100 ease-linear"></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="catalog-container" class="space-y-12"></div>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 4. MODAL POPUP WINDOW INTERACTION (NEW SPLIT PREVIEW) -->
+  <!-- ========================================== -->
+  <div id="info-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div id="modal-box" class="bg-white w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl transition-all transform scale-95 opacity-0 flex flex-col md:flex-row max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-hidden">
+      <!-- Sisi Kiri: Preview Foto Besar -->
+      <div class="w-full md:w-1/2 bg-neutral-100 relative aspect-square md:aspect-auto md:h-[500px]">
+        <img id="modal-product-img" src="" alt="Product Preview" class="w-full h-full object-cover">
+        <span id="modal-product-badge" class="absolute top-4 left-4 bg-black text-white text-[10px] font-black tracking-widest uppercase px-3 py-1 rounded-full"></span>
+      </div>
+      <!-- Sisi Kanan: Detail & Deskripsi -->
+      <div class="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-white h-auto md:h-[500px]">
+        <div>
+          <div class="flex justify-between items-start mb-2">
+            <span id="modal-product-id" class="text-[10px] font-bold text-[#E0568A] tracking-wider uppercase"></span>
+            <button onclick="closeModal()" class="text-gray-400 hover:text-black font-black text-sm cursor-pointer p-1">✕</button>
+          </div>
+          <h3 id="modal-product-title" class="text-lg md:text-xl font-black tracking-tight text-gray-900 uppercase leading-snug mb-3"></h3>
+          
+          <div class="flex items-baseline gap-2 mb-5">
+            <span id="modal-product-price-asli" class="text-xs text-gray-400 line-through font-medium"></span>
+            <span id="modal-product-price" class="text-base font-black text-gray-900"></span>
+          </div>
+          
+          <div class="border-t border-gray-100 pt-4">
+            <h4 class="text-[10px] font-black uppercase text-gray-400 tracking-wider mb-2">Deskripsi Kurasi</h4>
+            <p id="modal-product-desc" class="text-xs text-gray-600 leading-relaxed max-h-[160px] overflow-y-auto pr-1"></p>
+          </div>
+        </div>
+
+        <div id="modal-action-area" class="mt-6 space-y-2">
+          <!-- Tombol di-generate via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 5. JAVASCRIPT SYSTEM ENGINE -->
+  <!-- ========================================== -->
+  <script>
+    const aksesorisPriaImages = [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80", "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=400&q=80", "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80",
+      "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=400&q=80", "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80", "https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=400&q=80",
+      "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=400&q=80", "https://images.unsplash.com/photo-1611085583191-a3b1a30a5a40?w=400&q=80", "https://images.unsplash.com/photo-1608234807905-446585f3c602?w=400&q=80",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80", "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&q=80", "https://images.unsplash.com/photo-1539185441755-769473a23570?w=400&q=80",
+      "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=400&q=80", "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=400&q=80", "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&q=80"
+    ];
+    const aksesorisWanitaImages = [
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80", "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80", "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=400&q=80",
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&q=80", "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80", "https://images.unsplash.com/photo-1576053139778-7e32f2ae3cfd?w=400&q=80",
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400&q=80", "https://images.unsplash.com/photo-1590548784585-643d2b9f2925?w=400&q=80", "https://images.unsplash.com/photo-1569397249127-31355ecd792b?w=400&q=80",
+      "https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=400&q=80", "https://images.unsplash.com/photo-1543294001-f7cbfe92237e?w=400&q=80", "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80",
+      "https://images.unsplash.com/photo-1611085583191-a3b1a30a5a40?w=400&q=80", "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=400&q=80", "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=400&q=80"
+    ];
+    const kaosImages = [
+      "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400&q=80", "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&q=80", "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&q=80",
+      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&q=80", "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&q=80", "https://images.unsplash.com/photo-1495105787522-5334e3ffa0ef?w=400&q=80",
+      "https://images.unsplash.com/photo-1527719327859-c6ce80253573?w=400&q=80", "https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&q=80", "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400&q=80",
+      "https://images.unsplash.com/photo-1505022610485-0249ba5b3675?w=400&q=80", "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&q=80", "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&q=80",
+      "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=400&q=80", "https://images.unsplash.com/photo-1554568218-0f1715e72254?w=400&q=80", "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&q=80"
+    ];
+    const sepatuImages = [
+      "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80", "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&q=80", "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
+      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&q=80", "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80", "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=400&q=80",
+      "https://images.unsplash.com/photo-1539185441755-769473a23570?w=400&q=80", "https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?w=400&q=80", "https://images.unsplash.com/photo-1514989940723-e8e5163ccbe8?w=400&q=80",
+      "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=400&q=80", "https://images.unsplash.com/photo-1463100099907-44d12ba69d78?w=400&q=80", "https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&q=80",
+      "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?w=400&q=80", "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=400&q=80", "https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400&q=80"
+    ];
+    const kemejaImages = [
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80", "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400&q=80", "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&q=80",
+      "https://images.unsplash.com/photo-1611312449412-6cefac5dc3e4?w=400&q=80", "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&q=80", "https://images.unsplash.com/photo-1588359551462-3b3b4251ba60?w=400&q=80",
+      "https://images.unsplash.com/photo-1621072156002-e2fcc10d9514?w=400&q=80", "https://images.unsplash.com/photo-1578932750294-f5075e85f44a?w=400&q=80", "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=400&q=80",
+      "https://images.unsplash.com/photo-1626497742249-a7944f019685?w=400&q=80", "https://images.unsplash.com/photo-1555529771-835e59f54815?w=400&q=80", "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=400&q=80",
+      "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&q=80", "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&q=80", "https://images.unsplash.com/photo-1618517047922-094ee06a6442?w=400&q=80"
+    ];
+    const sweaterImages = [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&q=80", "https://images.unsplash.com/photo-1543062237-d7e174492203?w=400&q=80", "https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?w=400&q=80",
+      "https://images.unsplash.com/photo-1517142089942-ba376ce32a2e?w=400&q=80", "https://images.unsplash.com/photo-1611605698333-a517741e73f3?w=400&q=80", "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=400&q=80",
+      "https://images.unsplash.com/photo-1624224971170-2f84fed5eb5e?w=400&q=80", "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=400&q=80", "https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=400&q=80",
+      "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?w=400&q=80", "https://images.unsplash.com/photo-1545063914-a1a6ea821c88?w=400&q=80", "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80",
+      "https://images.unsplash.com/photo-1516826957135-700dedea698c?w=400&q=80", "https://images.unsplash.com/photo-1574164904299-3a102b110380?w=400&q=80", "https://images.unsplash.com/photo-1601333144130-8cbb312386b6?w=400&q=80"
+    ];
+    const kerudungImages = [
+      "https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?w=400&q=80", "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?w=400&q=80", "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
+      "https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&q=80", "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=400&q=80", "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400&q=80",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80", "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&q=80", "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80",
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80", "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80", "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400&q=80",
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&q=80", "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&q=80", "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400&q=80"
+    ];
+
+    const databaseProduk = {
+      "aksesoris-pria": {
+        title: "Aksesoris Pria",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 75000 + (i * 12500);
+          return {
+            id: `TR-AP${i+1}`,
+            name: `Curated Men Essential Gear Drop Vol. ${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 50000,
+            badge: i % 3 == 0 ? "Like New" : "Vintage",
+            img: aksesorisPriaImages[i],
+            desc: "Aksesoris vintage pilihan berkualitas tinggi untuk melengkapi outfit retro streetwear harianmu. Kondisi prima dan sudah melalui proses kurasi ketat."
+          }
+        })
+      },
+      "aksesoris-wanita": {
+        title: "Aksesoris Wanita",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 45000 + (i * 9000);
+          return {
+            id: `TR-AW${i+1}`,
+            name: `Luxury Aesthetic Women Rings & Scarf Edition No. ${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 35000,
+            badge: "Best Seller",
+            img: aksesorisWanitaImages[i],
+            desc: "Perhiasan aksesoris wanita estetik dengan material premium tahan lama. Memberikan sentuhan elegan dan eksklusif yang jarang ditemukan di pasaran."
+          }
+        })
+      },
+      "kaos": {
+        title: "Kaos Vintage & Oversize",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 85000 + (i * 10000);
+          return {
+            id: `TR-K${i+1}`,
+            name: `Vintage Heavyweight Graphic Streetwear Tees Type-${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 65000,
+            badge: i % 2 == 0 ? "Grail" : "Thrift",
+            img: kaosImages[i],
+            desc: "Kaos vintage heavyweight kain tebal dengan grafik retro otentik pudar alami (faded looks). Karakteristik kain juara dan sangat nyaman dipakai."
+          }
+        })
+      },
+      "sepatu": {
+        title: "Sepatu Sneaker & Sport",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 350000 + (i * 45000);
+          return {
+            id: `TR-S${i+1}`,
+            name: `Hypebeast Urban Sneakers Special Drop SB-${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 150000,
+            badge: "Mint",
+            img: sepatuImages[i],
+            desc: "Sneakers urban handpicked original curated. Sole empuk, jahitan kokoh, kondisi fisik mulus siap diajak keliling kota tanpa kendala."
+          }
+        })
+      },
+      "baju-kemeja": {
+        title: "Baju & Kemeja",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 95000 + (i * 15000);
+          return {
+            id: `TR-KM${i+1}`,
+            name: `Premium Flannel Casual Grid-Pattern Workshirt Series ${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 55000,
+            badge: "Casual",
+            img: kemejaImages[i],
+            desc: "Kemeja flanel atau kasual bermotif timeless. Sangat cocok sebagai outer look gaya streetwear skena maupun kasual santai formal."
+          }
+        })
+      },
+      "sweater": {
+        title: "Sweater & Hoodie",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 120000 + (i * 20000);
+          return {
+            id: `TR-SW${i+1}`,
+            name: `Cozy Boxy Crewneck Hoodie Streetwear Selection SW-${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 80000,
+            badge: "Steal Deal",
+            img: sweaterImages[i],
+            desc: "Crewneck / Hoodie dengan fitting boxy pas di badan. Kain tebal tidak bikin gerah, karet pergelangan kencang, warna pekat istimewa."
+          }
+        })
+      },
+      "kerudung": {
+        title: "Kerudung & Scarf",
+        items: Array.from({length: 15}, (_, i) => {
+          let hargaJual = 25000 + (i * 3500);
+          return {
+            id: `TR-KD${i+1}`,
+            name: `Premium Silk Saudia Voal Daily Hijab Collection-${i+1}`,
+            harga: hargaJual,
+            hargaAsli: hargaJual + 15000,
+            badge: "Daily",
+            img: kerudungImages[i],
+            desc: "Hijab voal premium yang lembut, sejuk, dan mudah dibentuk. Nyaman dipakai seharian untuk aktivitas kasual maupun formal."
+          }
+        })
+      }
+    };
+
+    let activeRole = 'customer';
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+
+    let currentSlide = 0;
+    const slideDuration = 5000; 
+    let progress = 0;
+    let updateInterval = 30;
+    let sliderTimer;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadLocalStorageData();
+      renderCatalog('all', '');
+      initHeroSlider();
+    });
+
+    function initHeroSlider() {
+      const progressBar = document.getElementById("nike-progress-bar");
+      const indexText = document.getElementById("nike-index-text");
+      const slides = document.querySelectorAll(".nike-slide");
+      
+      clearInterval(sliderTimer);
+      progress = 0;
+
+      sliderTimer = setInterval(() => {
+        progress += (updateInterval / slideDuration) * 100;
+        if (progress >= 100) {
+          progress = 0;
+          slides[currentSlide].classList.remove("opacity-100", "z-10");
+          slides[currentSlide].classList.add("opacity-0", "z-0");
+          currentSlide = (currentSlide + 1) % slides.length;
+          slides[currentSlide].classList.remove("opacity-0", "z-0");
+          slides[currentSlide].classList.add("opacity-100", "z-10");
+          if(indexText) indexText.innerText = `${currentSlide + 1} / ${slides.length}`;
+        }
+        if(progressBar) progressBar.style.width = `${progress}%`;
+      }, updateInterval);
+    }
+
+    // Penyempurnaan Konverter Tembus Direct Link Pinterest (Menangani URL Pendek & Halaman Utama)
+    function fixPinterestUrl(url) {
+      if (!url) return '';
+      let cleanUrl = url.trim();
+      
+      // Deteksi jika link mengarah ke image cdn langsung
+      if (cleanUrl.includes("i.pinimg.com")) {
+        return cleanUrl;
+      }
+      
+      // Jika link format pin biasa hlm web pinterest
+      if (cleanUrl.includes("pinterest.com/pin/")) {
+        let parts = cleanUrl.split("/pin/");
+        if (parts.length > 1) {
+          let pinId = parts[1].split("/")[0];
+          return `https://i.pinimg.com/originals/${pinId.slice(0,2)}/${pinId.slice(2,4)}/${pinId.slice(4)}/${pinId}.jpg`;
+        }
+      }
+      
+      // Deteksi jika berupa shortlink pin.it (ingatkan user via log/fallback agar optimal)
+      if (cleanUrl.includes("pin.it")) {
+        return cleanUrl; // dikembalikan langsung untuk diproses browser
+      }
+
+      return cleanUrl;
+    }
+
+// ... (Bagian atas script tetap, hanya modifikasi bagian di bawah ini)
+
+// FUNGSI INI UNTUK MEMFILTER BARANG YANG SUDAH TERJUAL
+function loadLocalStorageData() {
+  const localProducts = JSON.parse(localStorage.getItem('added_products')) || [];
+  const soldItems = JSON.parse(localStorage.getItem('sold_items')) || [];
+
+  // Reset database sebelum sinkronisasi
+  // (Pastikan databaseProduk sudah didefinisikan sebelumnya)
+  
+  localProducts.forEach(prod => {
+    if (databaseProduk[prod.cat]) {
+      // HANYA TAMBAHKAN JIKA BELUM TERJUAL
+      if (!soldItems.includes(prod.id)) {
+        const isExist = databaseProduk[prod.cat].items.some(item => item.id === prod.id);
+        if (!isExist) {
+          databaseProduk[prod.cat].items.unshift({
+            id: prod.id,
+            name: prod.name,
+            harga: parseInt(prod.price) || 0,
+            badge: prod.cond || 'Thrift',
+            img: prod.img || ''
+          });
+        }
+      }
+    }
+  });
+}
+
+// TAMBAHKAN FUNGSI INI DI SCRIPT ADMIN
+function markAsSold(id, cat) {
+  if (confirm("Yakin barang ini sudah di-CO dan mau dihapus dari katalog?")) {
+    let soldItems = JSON.parse(localStorage.getItem('sold_items')) || [];
+    soldItems.push(id);
+    localStorage.setItem('sold_items', JSON.stringify(soldItems));
+    
+    // Refresh tampilan admin
+    alert("Barang berhasil ditandai terjual!");
+    location.reload(); 
+  }
+}
+
+    function switchRole(role) {
+      activeRole = role;
+      const btnCust = document.getElementById('btn-tab-customer');
+      const btnAdmin = document.getElementById('btn-tab-admin');
+      const formCust = document.getElementById('form-customer');
+      const formAdmin = document.getElementById('form-admin');
+
+      if (role === 'customer') {
+        btnCust.className = "py-2.5 text-xs font-black uppercase tracking-wider rounded-xl bg-white text-black transition-all cursor-pointer shadow-xs";
+        btnAdmin.className = "py-2.5 text-xs font-black uppercase tracking-wider rounded-xl text-gray-500 hover:text-black transition-all cursor-pointer";
+        formCust.classList.replace('hidden', 'block');
+        formAdmin.classList.replace('block', 'hidden');
+      } else {
+        btnAdmin.className = "py-2.5 text-xs font-black uppercase tracking-wider rounded-xl bg-white text-black transition-all cursor-pointer shadow-xs";
+        btnCust.className = "py-2.5 text-xs font-black uppercase tracking-wider rounded-xl text-gray-500 hover:text-black transition-all cursor-pointer";
+        formAdmin.classList.replace('hidden', 'block');
+        formCust.classList.replace('block', 'hidden');
+      }
+    }
+
+    function loginAsCustomer() {
+      activeRole = 'customer';
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('admin-dashboard-screen').classList.add('hidden');
+      document.getElementById('main-catalog-screen').classList.remove('hidden');
+      document.getElementById('admin-indicator').classList.add('hidden');
+      document.getElementById('btn-back-to-admin').classList.add('hidden');
+      loadLocalStorageData();
+      filterCategory('all');
+    }
+
+    function loginAsAdmin() {
+      const pass = document.getElementById('admin-password').value;
+      if (pass === 'admin123') {
+        activeRole = 'admin';
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-catalog-screen').classList.add('hidden');
+        document.getElementById('admin-dashboard-screen').classList.remove('hidden');
+        loadLocalStorageData();
+        renderAdminDashboard();
+        document.getElementById('admin-password').value = '';
+      } else {
+        alert("Akses ditolak! Kata sandi salah.");
+      }
+    }
+
+    function returnToAdminPanel() {
+      document.getElementById('main-catalog-screen').classList.add('hidden');
+      document.getElementById('admin-dashboard-screen').classList.remove('hidden');
+      renderAdminDashboard();
+    }
+
+    function logoutToGate() {
+      activeRole = 'customer';
+      document.getElementById('main-catalog-screen').classList.add('hidden');
+      document.getElementById('admin-dashboard-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-password').value = '';
+      clearInterval(sliderTimer);
+    }
+
+    function renderAdminDashboard() {
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+      let totalStok = 0;
+
+      Object.keys(databaseProduk).forEach(key => {
+        const cat = databaseProduk[key];
+        const count = cat.items.length;
+        totalStok += count;
+
+        let minHarga = count > 0 ? Math.min(...cat.items.map(i => i.harga)) : 0;
+        let maxHarga = count > 0 ? Math.max(...cat.items.map(i => i.harga)) : 0;
+
+        const row = document.createElement('tr');
+        row.className = "border-b border-neutral-800 hover:bg-neutral-900/40 transition";
+        row.innerHTML = `
+          <td class="p-4 font-bold text-white">${cat.title}</td>
+          <td class="p-4 text-neutral-400">${count} Items</td>
+          <td class="p-4 text-amber-400">Rp ${minHarga.toLocaleString('id-ID')} - Rp ${maxHarga.toLocaleString('id-ID')}</td>
+          <td class="p-4"><button onclick="viewCategoryFromAdmin('${key}')" class="text-sky-400 hover:underline font-bold cursor-pointer">Pantau Live →</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('stat-total').innerText = totalStok;
+    }
+
+    function viewCategoryFromAdmin(key) {
+      document.getElementById('admin-dashboard-screen').classList.add('hidden');
+      document.getElementById('main-catalog-screen').classList.remove('hidden');
+      document.getElementById('admin-indicator').classList.remove('hidden');
+      document.getElementById('btn-back-to-admin').classList.remove('hidden');
+      filterCategory(key);
+    }
+
+    function deleteProduct(catKey, itemId) {
+      if (confirm(`Bro, serius mau menghapus produk [${itemId}] ini dari katalog?`)) {
+        databaseProduk[catKey].items = databaseProduk[catKey].items.filter(item => item.id !== itemId);
+        
+        let localProducts = JSON.parse(localStorage.getItem('added_products')) || [];
+        localProducts = localProducts.filter(prod => prod.id !== itemId);
+        localStorage.setItem('added_products', JSON.stringify(localProducts));
+
+        let deletedDefaults = JSON.parse(localStorage.getItem('deleted_default_products')) || [];
+        if (!deletedDefaults.includes(itemId)) {
+          deletedDefaults.push(itemId);
+          localStorage.setItem('deleted_default_products', JSON.stringify(deletedDefaults));
+        }
+
+        alert("Produk berhasil dihapus dari etalase!");
+        renderCatalog(currentCategory, currentSearchQuery);
+      }
+    }
+
+    function applyDeletedDefaultsFilter() {
+      const deletedDefaults = JSON.parse(localStorage.getItem('deleted_default_products')) || [];
+      Object.keys(databaseProduk).forEach(key => {
+        databaseProduk[key].items = databaseProduk[key].items.filter(item => !deletedDefaults.includes(item.id));
+      });
+    }
+
+    function openAddProductModal() {
+      document.getElementById('modal-product-title').innerText = "Suntik Data Item Baru";
+      document.getElementById('modal-product-img').src = "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600";
+      document.getElementById('modal-product-badge').innerText = "NEW ACCESS";
+      document.getElementById('modal-product-id').innerText = "SYSTEM ENTRY";
+      document.getElementById('modal-product-price-asli').innerText = "";
+      document.getElementById('modal-product-price').innerText = "INPUT FORM";
+
+      document.getElementById('modal-product-desc').innerHTML = `
+        <form id="form-tambah-produk" class="space-y-3 mt-1 text-left">
+          <div>
+            <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Pilih Target Menu</label>
+            <select id="add-cat" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold text-gray-800">
+              <option value="aksesoris-wanita">Aksesoris Wanita</option>
+              <option value="aksesoris-pria">Aksesoris Pria</option>
+              <option value="kaos">Kaos Vintage</option>
+              <option value="sepatu">Sepatu</option>
+              <option value="baju-kemeja">Baju & Kemeja</option>
+              <option value="sweater">Sweater</option>
+              <option value="kerudung">Kerudung</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Nama Barang Curated</label>
+            <input type="text" id="add-name" required placeholder="Contoh: Gelang Cantik Titanium" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800">
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Harga Asli Coret</label>
+              <input type="number" id="add-harga-asli" placeholder="50000" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800">
+            </div>
+            <div>
+              <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Harga Jual Toko (Rp)</label>
+              <input type="number" id="add-harga" required placeholder="45000" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Kondisi / Badge</label>
+            <input type="text" id="add-badge" placeholder="Thrift" class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800">
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Deskripsi Tambahan</label>
+            <textarea id="add-desc" placeholder="Tuliskan detail kondisi baju, lingkar dada/panjang di sini..." class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 h-16 resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Link Pinterest / Gambar</label>
+            <input type="text" id="add-img" required placeholder="Paste link pinterest di sini..." class="w-full p-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800">
+          </div>
+        </form>
+      `;
+
+      document.getElementById('modal-action-area').innerHTML = `
+        <div class="flex gap-2 w-full">
+          <button onclick="closeModal()" class="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-bold text-xs uppercase transition cursor-pointer">Batal</button>
+          <button form="form-tambah-produk" type="submit" class="w-1/2 bg-black hover:bg-neutral-900 text-white py-3 rounded-xl font-bold text-xs uppercase transition cursor-pointer">Simpan Live</button>
+        </div>
+      `;
+
+      document.getElementById('form-tambah-produk').onsubmit = function(e) {
+        e.preventDefault();
+        const cat = document.getElementById('add-cat').value;
+        const name = document.getElementById('add-name').value;
+        const price = parseInt(document.getElementById('add-harga').value, 10) || 0;
+        const originalPriceInput = document.getElementById('add-harga-asli').value;
+        const originalPrice = originalPriceInput ? parseInt(originalPriceInput, 10) : null;
+        const cond = document.getElementById('add-badge').value || 'Thrift';
+        const descriptionText = document.getElementById('add-desc').value || "Koleksi item kurasi eksklusif dengan kondisi fisik istimewa, steril bersih wangi siap pakai langsung untuk menunjang penampilan harianmu.";
+        const imgUrl = document.getElementById('add-img').value;
+        const uniqueId = "TR-" + Math.floor(1000 + Math.random() * 9000);
+
+        const localProducts = JSON.parse(localStorage.getItem('added_products')) || [];
+        localProducts.push({ id: uniqueId, name, cat, price, hargaAsli: originalPrice, cond, img: imgUrl, desc: descriptionText });
+        localStorage.setItem('added_products', JSON.stringify(localProducts));
+
+        loadLocalStorageData();
+        applyDeletedDefaultsFilter();
+
+        alert("Sukses, bro! Produk baru berhasil live.");
+        closeModal();
+        renderAdminDashboard();
+        renderCatalog(currentCategory, currentSearchQuery);
+      };
+
+      const modal = document.getElementById('info-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.remove('hidden');
+      setTimeout(() => { box.classList.remove('scale-95', 'opacity-0'); box.classList.add('scale-100', 'opacity-100'); }, 50);
+    }
+
+function renderCatalog(targetCategory = 'all', searchQuery = '') {
+  const container = document.getElementById('catalog-container');
+  const soldItems = JSON.parse(localStorage.getItem('sold_items')) || [];
+  container.innerHTML = '';
+
+  const categoriesToRender = targetCategory === 'all' ? Object.keys(databaseProduk) : [targetCategory];
+
+  categoriesToRender.forEach(catKey => {
+    const cat = databaseProduk[catKey];
+    // LOGIKA FILTER: Hapus barang yang ID-nya ada di soldItems
+    const filteredItems = cat.items.filter(item => 
+      !soldItems.includes(item.id) && 
+      (item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+       item.id.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
+    // ... (sisanya sama, render seperti biasa)
+
+        if (filteredItems.length > 0) {
+          const section = document.createElement('section');
+          section.className = "space-y-6 fade-in";
+          section.innerHTML = `
+            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+              <h3 class="text-xs font-black uppercase tracking-wider text-gray-800">${cat.title}</h3>
+              <span class="text-[10px] font-bold bg-neutral-900 text-white px-2 py-0.5 rounded">${filteredItems.length} Stok</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              ${filteredItems.map(item => `
+                <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between relative group">
+                  <div class="relative aspect-square bg-gray-50 overflow-hidden cursor-pointer" onclick="openViewProductModal('${catKey}', '${item.id}')">
+                    ${item.badge ? `<span class="absolute top-2 left-2 z-10 bg-black text-white text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded">${item.badge}</span>` : ''}
+                    
+                    ${activeRole === 'admin' ? `
+                      <button onclick="event.stopPropagation(); deleteProduct('${catKey}', '${item.id}')" class="absolute top-2 right-2 z-20 bg-red-600 hover:bg-red-700 text-white font-black text-[9px] uppercase px-2 py-1 rounded shadow-md transition cursor-pointer">🗑️ Hapus</button>
+                    ` : ''}
+
+                    <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500';">
+                  </div>
+                  <div class="p-4 flex-grow flex flex-col justify-between space-y-3">
+                    <div class="cursor-pointer" onclick="openViewProductModal('${catKey}', '${item.id}')">
+                      <span class="text-[9px] font-bold text-gray-400 block tracking-tight uppercase">${item.id}</span>
+                      <h4 class="text-xs font-bold text-gray-800 line-clamp-2 mt-0.5 group-hover:text-[#E0568A] transition-colors">${item.name}</h4>
+                    </div>
+                    <div>
+                      <div class="flex flex-col mb-2">
+                        ${item.hargaAsli ? `<span class="text-[10px] text-gray-400 line-through font-medium">Rp ${item.hargaAsli.toLocaleString('id-ID')}</span>` : ''}
+                        <span class="text-xs font-black text-gray-900">Rp ${item.harga.toLocaleString('id-ID')}</span>
+                      </div>
+                      <div class="grid grid-cols-5 gap-1">
+                        <button onclick="openViewProductModal('${catKey}', '${item.id}')" class="col-span-1 bg-gray-100 hover:bg-gray-200 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center cursor-pointer">📄</button>
+                        <button onclick="checkoutWhatsApp('${item.id}', '${item.name.replace(/'/g, "\\'")}')" class="col-span-4 bg-[#34552F] hover:bg-[#233a20] text-white py-2 rounded-xl text-[9px] font-bold uppercase tracking-wider text-center flex items-center justify-center cursor-pointer">💬 Order</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          container.appendChild(section);
+        }
+      });
+    }
+
+    // Fitur Baru: Modal Detail Split View (Foto Besar Kiri + Deskripsi Kanan)
+    function openViewProductModal(catKey, itemId) {
+      const item = databaseProduk[catKey].items.find(i => i.id === itemId);
+      if(!item) return;
+
+      document.getElementById('modal-product-img').src = item.img;
+      document.getElementById('modal-product-img').onerror = function() { this.src = 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600'; };
+      document.getElementById('modal-product-badge').innerText = item.badge || 'THRIFT';
+      document.getElementById('modal-product-id').innerText = item.id;
+      document.getElementById('modal-product-title').innerText = item.name;
+      
+      if(item.hargaAsli) {
+        document.getElementById('modal-product-price-asli').innerText = `Rp ${item.hargaAsli.toLocaleString('id-ID')}`;
+      } else {
+        document.getElementById('modal-product-price-asli').innerText = "";
+      }
+      document.getElementById('modal-product-price').innerText = `Rp ${item.harga.toLocaleString('id-ID')}`;
+      document.getElementById('modal-product-desc').innerText = item.desc || "Koleksi item vintage pilihan terbaik dari DariThrift. Sudah dicuci bersih, steril wangi premium, tinggal pakai langsung gas hangout!";
+
+      document.getElementById('modal-action-area').innerHTML = `
+        <div class="flex gap-2 w-full">
+          <button onclick="closeModal()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer">Kembali</button>
+          <a href="https://wa.me/6282114384014?text=Halo%20DariThrift,%20saya%20booking%20item%20[${item.id}]%20${encodeURIComponent(item.name)}" target="_blank" class="w-2/3 bg-[#34552F] hover:bg-[#233a20] text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest text-center flex items-center justify-center shadow-md">💬 AMBIL STEAL DEAL</a>
+        </div>
+      `;
+
+      const modal = document.getElementById('info-modal');
+      const box = document.getElementById('modal-box');
+      modal.classList.remove('hidden');
+      setTimeout(() => { box.classList.remove('scale-95', 'opacity-0'); box.classList.add('scale-100', 'opacity-100'); }, 50);
+    }
+
+    function filterCategory(categoryKey, element) {
+      currentCategory = categoryKey;
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-menu'));
+      
+      if (element) {
+        element.classList.add('active-menu');
+      } else {
+        const allBtn = document.querySelector("button[onclick*='all']");
+        if(allBtn) allBtn.classList.add('active-menu');
+      }
+
+      const hero = document.getElementById('hero-banner');
+      if (categoryKey !== 'all') {
+        if(hero) hero.style.display = "none";
+      } else {
+        if(hero) hero.style.display = "block";
+        initHeroSlider(); 
+      }
+
+      renderCatalog(currentCategory, currentSearchQuery);
+    }
+
+    function searchProduct(value) {
+      currentSearchQuery = value;
+      renderCatalog(currentCategory, currentSearchQuery);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('info-modal');
+      const box = document.getElementById('modal-box');
+      box.classList.remove('scale-100', 'opacity-100'); box.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => { modal.classList.add('hidden'); }, 200);
+    }
+
+  // =========================================================================
+// FITUR TAMBAHAN: OTOMATIS HAPUS PRODUK DI DASHBOARD SAAT CUSTOMER KLIK BELI
+// =========================================================================
+
+function checkoutWhatsApp(itemId, itemName) {
+  // Ubah baris ini agar menghapus di wadah yang sama (products_data)
+  let localProducts = JSON.parse(localStorage.getItem('products_data')) || [];
+  localProducts = localProducts.filter(p => p.id !== itemId);
+  localStorage.setItem('products_data', JSON.stringify(localProducts));
+
+  // 2. MASUKKAN KE DAFTAR BLACKLIST (Agar produk dari produk.json juga ikut tersembunyi)
+  let soldItems = JSON.parse(localStorage.getItem('sold_items')) || [];
+  if (!soldItems.includes(itemId)) {
+    soldItems.push(itemId);
+    localStorage.setItem('sold_items', JSON.stringify(soldItems));
+  }
+
+  if (typeof closeModal === 'function') closeModal();
+  
+  // 3. Modifikasi renderCatalog secara real-time agar menyaring barang yang sudah dibeli
+  if (typeof renderCatalog === 'function') {
+    renderCatalog(currentCategory, currentSearchQuery);
+  }
+
+  const message = `Halo DariThrift, saya order item [${itemId}] ${itemName}`;
+  const whatsappUrl = `https://wa.me/6282114384014?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+// --- ENGINE SYSTEM ASISTEN AUTOMATION ---
+// Mengubah perilaku tombol bawaan secara otomatis tanpa membongkar kode asli di atas
+
+const originalRenderCatalog = renderCatalog;
+renderCatalog = function(categoryKey, searchQuery) {
+  if (typeof originalRenderCatalog === 'function') {
+    originalRenderCatalog(categoryKey, searchQuery);
+  }
+  
+  // Otomatis deteksi semua tombol order lama di katalog utama dan hubungkan ke fungsi hapus
+  document.querySelectorAll("a[href^='https://wa.me/']").forEach(el => {
+   // Memastikan produk bawaan di produk.json ikut terfilter jika sudah dibeli
+if (typeof loadLocalStorageData === 'function') {
+  const originalLoadData = loadLocalStorageData;
+  loadLocalStorageData = function() {
+    originalLoadData();
+    let soldItems = JSON.parse(localStorage.getItem('sold_items')) || [];
+    if (window.allProducts && soldItems.length > 0) {
+      window.allProducts = window.allProducts.filter(p => !soldItems.includes(p.id));
+    }
+  };
+  }
+  });
+};
+
+const originalOpenViewProductModal = openViewProductModal;
+openViewProductModal = function(item) {
+  if (typeof originalOpenViewProductModal === 'function') {
+    originalOpenViewProductModal(item);
+  }
+  
+  // Otomatis deteksi tombol order di dalam Pop-up detail modal saat diklik
+  setTimeout(() => {
+    const modalBox = document.getElementById("modal-box");
+    if (modalBox) {
+      const modalLink = modalBox.querySelector("a[href^='https://wa.me/']");
+      if (modalLink) {
+        const newModalBtn = document.createElement("button");
+        newModalBtn.className = modalLink.className + " cursor-pointer";
+        newModalBtn.innerHTML = "💬 AMBIL STEAL DEAL";
+        newModalBtn.onclick = function() { checkoutWhatsApp(item.id, item.name); };
+        modalLink.parentNode.replaceChild(newModalBtn, modalLink);
+      }
+    }
+  }, 50);
+};
+  </script>
+</body>
+</html>
